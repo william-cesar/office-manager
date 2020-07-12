@@ -8,5 +8,6 @@
 		"workers"
 	],
 	"author": "William Cesar Tome",
-	"license": "MIT"
+	"license": "MIT",
+	"dependencies": {}
 }
