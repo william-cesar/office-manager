@@ -1,0 +1,12 @@
+{
+	"name": "office-manager",
+	"version": "1.0.0",
+	"description": "A crud app that manages workers' positions and occupations in a company",
+	"keywords": [
+		"crud",
+		"manage",
+		"workers"
+	],
+	"author": "William Cesar Tome",
+	"license": "MIT"
+}
