@@ -1,25 +1,33 @@
 const express = require('express')
 const { Profile, Sequelize } = require('../models')
+const pagination = require('../helpers/pagination')
 
 const router = express.Router()
 
 router.get('/', async (req, res) => {
-	const profile = await Profile.findAll()
+	const profile = await Profile.findAndCountAll({
+		order: [['profile_name', 'ASC']],
+	})
 	return res.jsonOK(profile)
 })
 
-router.get('/:name', async (req, res) => {
-	const { name } = req.params
+router.get('/:page', async (req, res) => {
+	const { profile_name } = req.body
+	const { page } = req.params
+	const limit = 5
 
-	const profile = await Profile.findAll({
+	const profile = await Profile.findAndCountAll({
 		where: {
 			profile_name: {
-				[Sequelize.Op.iLike]: `%${name}%`,
+				[Sequelize.Op.iLike]: `%${profile_name}%`,
 			},
 		},
+		order: [['profile_name', 'ASC']],
+		limit,
+		offset: pagination(page),
 	})
 
-	if (profile != '') {
+	if (profile.count != 0) {
 		return res.jsonOK(profile)
 	} else {
 		return res.jsonNotFound(null)
