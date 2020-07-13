@@ -5,5 +5,10 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 		},
 	})
+
+	Profile.associate = (models) => {
+		Profile.hasMany(models.Position, { foreignKey: 'profileId' })
+	}
+
 	return Profile
 }

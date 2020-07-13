@@ -1,6 +1,7 @@
 const express = require('express')
 const { Profile, Sequelize } = require('../models')
 const pagination = require('../helpers/pagination')
+const fixInputName = require('../helpers/fixInputName')
 
 const router = express.Router()
 
@@ -19,7 +20,7 @@ router.get('/:page', async (req, res) => {
 	const profile = await Profile.findAndCountAll({
 		where: {
 			profile_name: {
-				[Sequelize.Op.iLike]: `%${profile_name}%`,
+				[Sequelize.Op.iLike]: `%${fixInputName(profile_name)}%`,
 			},
 		},
 		order: [['profile_name', 'ASC']],
@@ -36,18 +37,17 @@ router.get('/:page', async (req, res) => {
 
 router.post('/', async (req, res) => {
 	const { profile_name } = req.body
-	const removeSpaces = profile_name.trim()
-	const profileName =
-		removeSpaces.charAt(0).toUpperCase() + removeSpaces.slice(1)
 
 	const profile = await Profile.findOne({
-		where: { profile_name: profileName },
+		where: { profile_name: fixInputName(profile_name) },
 	})
 	if (profile) {
 		return res.jsonBadRequest(null, 'Profile already exists.')
 	}
 
-	const newProfile = await Profile.create({ profile_name })
+	const newProfile = await Profile.create({
+		profile_name: fixInputName(profile_name),
+	})
 
 	return res.jsonOK(newProfile)
 })
@@ -56,10 +56,6 @@ router.put('/:id', async (req, res) => {
 	const { id } = req.params
 	const { profile_name } = req.body
 
-	const removeSpaces = profile_name.trim()
-	const profileName =
-		removeSpaces.charAt(0).toUpperCase() + removeSpaces.slice(1)
-
 	const profile = await Profile.findOne({ where: { id } })
 
 	if (!profile) {
@@ -67,7 +63,7 @@ router.put('/:id', async (req, res) => {
 	}
 
 	const updateProfile = await Profile.update(
-		{ profile_name: profileName },
+		{ profile_name: fixInputName(profile_name) },
 		{ where: { id } }
 	)
 	const updatedProfile = await Profile.findOne({ where: { id } })
