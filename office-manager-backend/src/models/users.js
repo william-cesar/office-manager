@@ -28,7 +28,12 @@ module.exports = (sequelize, DataTypes) => {
 	})
 
 	User.associate = (models) => {
-		User.belongsTo(models.Position, { foreignKey: 'positionId' })
+		User.belongsTo(models.Position, {
+			foreignKey: {
+				name: 'positionId',
+				allowNull: false,
+			},
+		})
 	}
 
 	return User

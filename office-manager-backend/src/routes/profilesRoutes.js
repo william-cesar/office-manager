@@ -88,6 +88,12 @@ router.delete('/:id', async (req, res) => {
 		return res.jsonNotFound(null)
 	}
 
+	const isEmpty = await Profile.findAndCountAll({ where: { id } })
+
+	if (isEmpty.count != 0) {
+		return res.jsonBadRequest(null, 'Profile is not empty')
+	}
+
 	const deleteProfile = await Profile.destroy({ where: { id } })
 	return res.jsonOK(null, 'Profile deleted successfully')
 })

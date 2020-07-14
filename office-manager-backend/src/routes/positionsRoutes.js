@@ -50,6 +50,10 @@ router.post('/', async (req, res) => {
 		return res.jsonBadRequest(null, 'Position already exists.')
 	}
 
+	if (!profileId) {
+		return res.jsonBadRequest(null, 'Position must be attached to a Profile.')
+	}
+
 	const newPosition = await Position.create({
 		position_name: fixInputName(position_name),
 		profileId,
@@ -73,6 +77,10 @@ router.put('/:id', async (req, res) => {
 		return res.jsonBadRequest(null, 'Position name must not be empty.')
 	}
 
+	if (!profileId) {
+		return res.jsonBadRequest(null, 'Position must be attached to a Profile.')
+	}
+
 	const updatePosition = await Position.update(
 		{ position_name: fixInputName(position_name), profileId },
 		{ where: { id } }
@@ -89,6 +97,12 @@ router.delete('/:id', async (req, res) => {
 
 	if (!position) {
 		return res.jsonNotFound(null)
+	}
+
+	const isEmpty = await Position.findAndCountAll({ where: { id } })
+
+	if (isEmpty.count != 0) {
+		return res.jsonBadRequest(null, 'Position is not empty')
 	}
 
 	const deletePosition = await Position.destroy({ where: { id } })
