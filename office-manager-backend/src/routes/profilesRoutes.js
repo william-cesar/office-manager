@@ -38,6 +38,10 @@ router.get('/:page', async (req, res) => {
 router.post('/', async (req, res) => {
 	const { profile_name } = req.body
 
+	if (!fixInputName(profile_name)) {
+		return res.jsonBadRequest(null, 'Profile name must not be empty.')
+	}
+
 	const profile = await Profile.findOne({
 		where: { profile_name: fixInputName(profile_name) },
 	})
@@ -60,6 +64,10 @@ router.put('/:id', async (req, res) => {
 
 	if (!profile) {
 		return res.jsonNotFound(null)
+	}
+
+	if (!fixInputName(profile_name)) {
+		return res.jsonBadRequest(null, 'Profile name must not be empty.')
 	}
 
 	const updateProfile = await Profile.update(

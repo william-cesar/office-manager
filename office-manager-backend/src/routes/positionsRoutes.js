@@ -39,6 +39,10 @@ router.post('/', async (req, res) => {
 	const { position_name } = req.body
 	const { profileId } = req.body
 
+	if (!fixInputName(position_name)) {
+		return res.jsonBadRequest(null, 'Position name must not be empty.')
+	}
+
 	const position = await Position.findOne({
 		where: { position_name: fixInputName(position_name) },
 	})
@@ -63,6 +67,10 @@ router.put('/:id', async (req, res) => {
 
 	if (!position) {
 		return res.jsonNotFound(null)
+	}
+
+	if (!fixInputName(position_name)) {
+		return res.jsonBadRequest(null, 'Position name must not be empty.')
 	}
 
 	const updatePosition = await Position.update(
