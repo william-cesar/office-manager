@@ -1,4 +1,4 @@
-const registrationValidator = (cpf) => {
+module.exports = (cpf) => {
 	const verifiedCPF = cpf.toString()
 	const testInput = /[0-9]{11}/.test(verifiedCPF)
 
@@ -62,13 +62,11 @@ const registrationValidator = (cpf) => {
 					'-' +
 					arr.slice(9, 11)
 
-				const formatedCPF = format.replace(/,/g, '')
-				return formatedCPF
+				const validateCPF = format.replace(/,/g, '')
+				return validateCPF
 			}
 			return registrationMask(verifiedCPF)
 		}
 		return testCPF(verifiedCPF)
 	}
 }
-
-module.exports = registrationValidator
