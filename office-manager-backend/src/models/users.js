@@ -11,9 +11,10 @@ module.exports = (sequelize, DataTypes) => {
 		registration_doc: {
 			type: DataTypes.STRING,
 			allowNull: false,
+			unique: true,
 		},
 		birthdate: {
-			type: DataTypes.DATEONLY,
+			type: DataTypes.STRING,
 			allowNull: true,
 		},
 		gender: {
