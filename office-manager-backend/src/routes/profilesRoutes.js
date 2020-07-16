@@ -1,31 +1,51 @@
 const express = require('express')
-const { Profile, Sequelize } = require('../models')
-const pagination = require('../helpers/pagination')
-const fixInputName = require('../helpers/fixInputName')
+const { Profile, Position, Sequelize } = require('../models')
+const paginate = require('../helpers/paginate')
+const standardString = require('../helpers/standardString')
 
 const router = express.Router()
 
-router.get('/', async (req, res) => {
-	const profile = await Profile.findAndCountAll({
-		order: [['profile_name', 'ASC']],
-	})
-	return res.jsonOK(profile)
-})
-
-router.get('/:page', async (req, res) => {
+router.get('/active/:page', async (req, res) => {
 	const { profile_name } = req.body
 	const { page } = req.params
 	const limit = 5
 
 	const profile = await Profile.findAndCountAll({
+		include: [{ model: Position, where: { isActive: true } }],
 		where: {
 			profile_name: {
-				[Sequelize.Op.iLike]: `%${fixInputName(profile_name)}%`,
+				[Sequelize.Op.iLike]: `%${standardString(profile_name)}%`,
 			},
+			isActive: true,
 		},
 		order: [['profile_name', 'ASC']],
 		limit,
-		offset: pagination(page),
+		offset: paginate(page),
+	})
+
+	if (profile.count != 0) {
+		return res.jsonOK(profile)
+	} else {
+		return res.jsonNotFound(null)
+	}
+})
+
+router.get('/inactive/:page', async (req, res) => {
+	const { profile_name } = req.body
+	const { page } = req.params
+	const limit = 5
+
+	const profile = await Profile.findAndCountAll({
+		include: [{ model: Position, where: { isActive: false } }],
+		where: {
+			profile_name: {
+				[Sequelize.Op.iLike]: `%${standardString(profile_name)}%`,
+			},
+			isActive: false,
+		},
+		order: [['profile_name', 'ASC']],
+		limit,
+		offset: paginate(page),
 	})
 
 	if (profile.count != 0) {
@@ -38,27 +58,28 @@ router.get('/:page', async (req, res) => {
 router.post('/', async (req, res) => {
 	const { profile_name } = req.body
 
-	if (!fixInputName(profile_name)) {
+	if (!standardString(profile_name)) {
 		return res.jsonBadRequest(null, 'Profile name must not be empty.')
 	}
 
 	const profile = await Profile.findOne({
-		where: { profile_name: fixInputName(profile_name) },
+		where: { profile_name: standardString(profile_name) },
 	})
 	if (profile) {
 		return res.jsonBadRequest(null, 'Profile already exists.')
 	}
 
 	const newProfile = await Profile.create({
-		profile_name: fixInputName(profile_name),
+		profile_name: standardString(profile_name),
 	})
 
 	return res.jsonOK(newProfile)
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/edit/:id', async (req, res) => {
 	const { id } = req.params
 	const { profile_name } = req.body
+	const { isActive } = req.body
 
 	const profile = await Profile.findOne({ where: { id } })
 
@@ -66,12 +87,12 @@ router.put('/:id', async (req, res) => {
 		return res.jsonNotFound(null)
 	}
 
-	if (!fixInputName(profile_name)) {
+	if (!standardString(profile_name)) {
 		return res.jsonBadRequest(null, 'Profile name must not be empty.')
 	}
 
 	const updateProfile = await Profile.update(
-		{ profile_name: fixInputName(profile_name) },
+		{ profile_name: standardString(profile_name), isActive },
 		{ where: { id } }
 	)
 	const updatedProfile = await Profile.findOne({ where: { id } })
@@ -79,22 +100,38 @@ router.put('/:id', async (req, res) => {
 	return res.jsonOK(updatedProfile)
 })
 
-router.delete('/:id', async (req, res) => {
+router.patch('/:id', async (req, res) => {
 	const { id } = req.params
 
-	const profile = await Profile.findOne({ where: { id } })
+	const profile = await Profile.findOne({
+		include: [{ model: Position }],
+		where: { id, isActive: true },
+	})
 
 	if (!profile) {
 		return res.jsonNotFound(null)
 	}
 
-	const isEmpty = await Profile.findAndCountAll({ where: { id } })
+	if (profile) {
+		const { Positions } = profile.dataValues
 
-	if (isEmpty.count != 0) {
-		return res.jsonBadRequest(null, 'Profile is not empty')
+		let isNotEmpty = Positions.filter((item) => {
+			return item.dataValues.isActive == true
+		})
+
+		console.log(isNotEmpty)
+		if (isNotEmpty != '') {
+			return res.jsonBadRequest(
+				null,
+				'This profile has at least one position attached to it.'
+			)
+		}
 	}
 
-	const deleteProfile = await Profile.destroy({ where: { id } })
+	const setProfileInactive = await Profile.update(
+		{ isActive: false },
+		{ where: { id } }
+	)
 	return res.jsonOK(null, 'Profile deleted successfully')
 })
 
