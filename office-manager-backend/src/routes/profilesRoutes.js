@@ -7,19 +7,25 @@ const router = express.Router()
 
 router.get('/active/:page', async (req, res) => {
 	const { profile_name } = req.body
+	const { id } = req.body
 	const { page } = req.params
 	const limit = 5
 
 	const profile = await Profile.findAndCountAll({
 		where: {
-			profile_name: {
-				[Sequelize.Op.iLike]: `%${standardString(profile_name)}%`,
-			},
+			[Sequelize.Op.or]: [
+				{
+					profile_name: {
+						[Sequelize.Op.iLike]: `%${standardString(profile_name)}%`,
+					},
+				},
+				{ id },
+			],
 			isActive: true,
 		},
 		order: [['profile_name', 'ASC']],
 		limit,
-		offset: paginate(page),
+		offset: paginate(page, limit),
 	})
 
 	if (profile.count != 0) {
@@ -31,19 +37,25 @@ router.get('/active/:page', async (req, res) => {
 
 router.get('/inactive/:page', async (req, res) => {
 	const { profile_name } = req.body
+	const { id } = req.body
 	const { page } = req.params
 	const limit = 5
 
 	const profile = await Profile.findAndCountAll({
 		where: {
-			profile_name: {
-				[Sequelize.Op.iLike]: `%${standardString(profile_name)}%`,
-			},
+			[Sequelize.Op.or]: [
+				{
+					profile_name: {
+						[Sequelize.Op.iLike]: `%${standardString(profile_name)}%`,
+					},
+				},
+				{ id },
+			],
 			isActive: false,
 		},
 		order: [['profile_name', 'ASC']],
 		limit,
-		offset: paginate(page),
+		offset: paginate(page, limit),
 	})
 
 	if (profile.count != 0) {

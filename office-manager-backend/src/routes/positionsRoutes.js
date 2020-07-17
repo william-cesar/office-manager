@@ -7,19 +7,25 @@ const router = express.Router()
 
 router.get('/active/:page', async (req, res) => {
 	const { position_name } = req.body
+	const { id } = req.body
 	const { page } = req.params
 	const limit = 5
 
 	const position = await Position.findAndCountAll({
 		where: {
-			position_name: {
-				[Sequelize.Op.iLike]: `%${standardString(position_name)}%`,
-			},
+			[Sequelize.Op.or]: [
+				{
+					position_name: {
+						[Sequelize.Op.iLike]: `%${standardString(position_name)}%`,
+					},
+				},
+				{ id },
+			],
 			isActive: true,
 		},
 		order: [['position_name', 'ASC']],
 		limit,
-		offset: paginate(page),
+		offset: paginate(page, limit),
 	})
 
 	if (position.count != 0) {
@@ -31,19 +37,25 @@ router.get('/active/:page', async (req, res) => {
 
 router.get('/inactive/:page', async (req, res) => {
 	const { position_name } = req.body
+	const { id } = req.body
 	const { page } = req.params
 	const limit = 5
 
 	const position = await Position.findAndCountAll({
 		where: {
-			position_name: {
-				[Sequelize.Op.iLike]: `%${standardString(position_name)}%`,
-			},
+			[Sequelize.Op.or]: [
+				{
+					position_name: {
+						[Sequelize.Op.iLike]: `%${standardString(position_name)}%`,
+					},
+				},
+				{ id },
+			],
 			isActive: false,
 		},
 		order: [['position_name', 'ASC']],
 		limit,
-		offset: paginate(page),
+		offset: paginate(page, limit),
 	})
 
 	if (position.count != 0) {
@@ -99,7 +111,6 @@ router.put('/edit/:id', async (req, res) => {
 	const { id } = req.params
 	const { position_name } = req.body
 	const { profileId } = req.body
-	const { isActive } = req.body
 
 	const position = await Position.findOne({ where: { id } })
 
@@ -130,7 +141,7 @@ router.put('/edit/:id', async (req, res) => {
 	}
 
 	const updatePosition = await Position.update(
-		{ position_name: standardString(position_name), isActive, profileId },
+		{ position_name: standardString(position_name), isActive: true, profileId },
 		{ where: { id } }
 	)
 	const updatedPosition = await Position.findOne({ where: { id } })
