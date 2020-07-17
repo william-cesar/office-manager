@@ -11,7 +11,6 @@ router.get('/active/:page', async (req, res) => {
 	const limit = 5
 
 	const profile = await Profile.findAndCountAll({
-		include: [{ model: Position, where: { isActive: true } }],
 		where: {
 			profile_name: {
 				[Sequelize.Op.iLike]: `%${standardString(profile_name)}%`,
@@ -36,7 +35,6 @@ router.get('/inactive/:page', async (req, res) => {
 	const limit = 5
 
 	const profile = await Profile.findAndCountAll({
-		include: [{ model: Position, where: { isActive: false } }],
 		where: {
 			profile_name: {
 				[Sequelize.Op.iLike]: `%${standardString(profile_name)}%`,
@@ -79,7 +77,6 @@ router.post('/', async (req, res) => {
 router.put('/edit/:id', async (req, res) => {
 	const { id } = req.params
 	const { profile_name } = req.body
-	const { isActive } = req.body
 
 	const profile = await Profile.findOne({ where: { id } })
 
@@ -92,7 +89,7 @@ router.put('/edit/:id', async (req, res) => {
 	}
 
 	const updateProfile = await Profile.update(
-		{ profile_name: standardString(profile_name), isActive },
+		{ profile_name: standardString(profile_name), isActive: true },
 		{ where: { id } }
 	)
 	const updatedProfile = await Profile.findOne({ where: { id } })
