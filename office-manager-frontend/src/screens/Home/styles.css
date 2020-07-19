@@ -1,0 +1,120 @@
+.Home {
+	display: flex;
+	justify-content: space-evenly;
+	overflow: hidden;
+	letter-spacing: 2px;
+}
+
+.left-section {
+	background: linear-gradient(180deg, #000000b3 99.99%, #00000000 100%),
+		url('/images/bg_profiles.jpg');
+}
+
+.middle-section {
+	background: linear-gradient(180deg, #000000b3 99.99%, #00000000 100%),
+		url('/images/bg_positions.jpg');
+}
+
+.right-section {
+	background: linear-gradient(180deg, #000000b3 99.99%, #00000000 100%),
+		url('/images/bg_users.jpg');
+}
+
+.left-section,
+.middle-section,
+.right-section {
+	width: calc(100% / 3);
+	height: 100vh;
+	display: flex;
+	color: #eaeaea;
+	flex-direction: column;
+	align-items: center;
+	border: 1px solid #eaeaea;
+	background-position: center;
+	background-size: cover;
+}
+
+.left-section:hover,
+.middle-section:hover,
+.right-section:hover {
+	transform: scale(1.01);
+	transition: all 0.5s;
+}
+
+.section-logo {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: center;
+	width: 100%;
+	height: 45%;
+}
+
+.circle {
+	width: 600px;
+	height: 600px;
+	background-color: #75757588;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.circle img {
+	height: 350px;
+	width: 350px;
+}
+
+.section-label,
+.section-instruction,
+.section-bottom {
+	width: 100%;
+	text-align: center;
+}
+
+.section-label {
+	height: 15%;
+	font-size: 80px;
+	padding-top: 80px;
+}
+
+.section-instruction {
+	height: 20%;
+	padding: 100px 200px;
+	font-size: 70px;
+}
+
+.section-button {
+	padding-top: 50px;
+	height: 20%;
+}
+
+.section-button button {
+	background-color: #0081b8;
+	width: 600px;
+	height: 200px;
+	border-radius: 20px;
+	border: none;
+	color: #ffffff;
+	font-size: 50px;
+	font-weight: 600;
+}
+
+.section-button button:hover {
+	opacity: 0.7;
+	cursor: pointer;
+	transition: all ease 0.3s;
+}
+
+@media (max-width: 4000px) {
+	.section-instruction {
+		padding: 150px;
+		font-size: 60px;
+	}
+}
+
+@media (max-width: 2900px) {
+	.section-instruction {
+		padding: 50px;
+	}
+}
