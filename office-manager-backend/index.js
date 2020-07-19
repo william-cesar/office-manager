@@ -1,4 +1,5 @@
 const express = require('express')
+const cors = require('cors')
 const db = require('./src/models')
 const response = require('./src/middlewares/response')
 
@@ -9,6 +10,7 @@ const usersRoutes = require('./src/routes/usersRoutes')
 const server = express()
 const port = 3001
 
+server.user(cors())
 server.use(response)
 
 server.use(express.json())
