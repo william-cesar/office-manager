@@ -9,23 +9,11 @@ const validateDate = require('../helpers/validateDate')
 const router = express.Router()
 
 router.get('/active/:page', async (req, res) => {
-	const { first_name } = req.body
-	const { positionId } = req.body
 	const { page } = req.params
 	const limit = 5
 
 	const user = await User.findAndCountAll({
-		where: {
-			[Sequelize.Op.or]: [
-				{
-					first_name: {
-						[Sequelize.Op.iLike]: `%${standardString(first_name)}%`,
-					},
-				},
-				{ positionId },
-			],
-			isActive: true,
-		},
+		where: { isActive: true },
 		order: [['first_name', 'ASC']],
 		limit,
 		offset: paginate(page, limit),
@@ -39,23 +27,11 @@ router.get('/active/:page', async (req, res) => {
 })
 
 router.get('/inactive/:page', async (req, res) => {
-	const { first_name } = req.body
-	const { positionId } = req.body
 	const { page } = req.params
 	const limit = 5
 
 	const user = await User.findAndCountAll({
-		where: {
-			[Sequelize.Op.or]: [
-				{
-					first_name: {
-						[Sequelize.Op.iLike]: `%${standardString(first_name)}%`,
-					},
-				},
-				{ positionId },
-			],
-			isActive: false,
-		},
+		where: { isActive: false },
 		order: [['first_name', 'ASC']],
 		limit,
 		offset: paginate(page, limit),
