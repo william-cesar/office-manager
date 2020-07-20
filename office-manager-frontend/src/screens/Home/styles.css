@@ -2,7 +2,7 @@
 	display: flex;
 	justify-content: space-evenly;
 	overflow: hidden;
-	letter-spacing: 2px;
+	letter-spacing: 1px;
 }
 
 .left-section {
@@ -51,8 +51,8 @@
 }
 
 .circle {
-	width: 600px;
-	height: 600px;
+	width: 150px;
+	height: 150px;
 	background-color: #75757588;
 	border-radius: 50%;
 	display: flex;
@@ -61,8 +61,8 @@
 }
 
 .circle img {
-	height: 350px;
-	width: 350px;
+	height: 80px;
+	width: 80px;
 }
 
 .section-label,
@@ -74,30 +74,29 @@
 
 .section-label {
 	height: 15%;
-	font-size: 80px;
-	padding-top: 80px;
+	font-size: 32px;
+	padding-top: 20px;
 }
 
 .section-instruction {
 	height: 20%;
-	padding: 100px 200px;
-	font-size: 70px;
+	padding: 10px 50px;
+	font-size: 16px;
+	font-weight: 500;
 }
 
 .section-button {
-	padding-top: 50px;
 	height: 20%;
 }
 
 .section-button button {
 	background-color: #0081b8;
-	width: 600px;
-	height: 200px;
-	border-radius: 20px;
+	width: 180px;
+	height: 60px;
+	border-radius: 5px;
 	border: none;
 	color: #ffffff;
-	font-size: 50px;
-	font-weight: 600;
+	font-size: 15px;
 }
 
 .section-button button:hover {
@@ -106,15 +105,44 @@
 	transition: all ease 0.3s;
 }
 
-@media (max-width: 4000px) {
+@media (max-width: 1000px) {
 	.section-instruction {
-		padding: 150px;
-		font-size: 60px;
+		font-size: 14px;
 	}
 }
 
-@media (max-width: 2900px) {
+@media (max-width: 800px) {
+	.circle {
+		width: 100px;
+		height: 100px;
+	}
+
+	.circle img {
+		height: 50px;
+		width: 50px;
+	}
+
+	.section-label {
+		font-size: 26px;
+	}
+
 	.section-instruction {
-		padding: 50px;
+		padding: 0 40px;
+	}
+
+	.section-button button {
+		width: 130px;
+		height: 50px;
+		font-size: 12px;
+	}
+}
+
+@media (max-width: 650px) {
+	.section-label {
+		font-size: 20px;
+	}
+
+	.section-instruction {
+		padding: 0 10px;
 	}
 }

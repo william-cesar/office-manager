@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 
 import './styles.css'
@@ -52,7 +53,9 @@ export default function Home() {
 					<p>Clique em 'Visualizar perfis' para gerenciar seus perfis.</p>
 				</div>
 				<div className='section-button'>
-					<button>Visualizar perfis</button>
+					<Link to='/profiles'>
+						<button>Visualizar perfis</button>
+					</Link>
 				</div>
 			</div>
 			<div className='middle-section'>
@@ -71,7 +74,9 @@ export default function Home() {
 					<p>Clique em 'Visualizar cargos' para gerenciar seus cargos.</p>
 				</div>
 				<div className='section-button'>
-					<button>Visualizar cargos</button>
+					<Link to='/positions'>
+						<button>Visualizar cargos</button>
+					</Link>
 				</div>
 			</div>
 			<div className='right-section'>
@@ -90,7 +95,9 @@ export default function Home() {
 					<p>Clique em 'Visualizar usuários' para gerenciar seus usuários.</p>
 				</div>
 				<div className='section-button'>
-					<button>Visualizar usuários</button>
+					<Link to='/users'>
+						<button>Visualizar usuários</button>
+					</Link>
 				</div>
 			</div>
 		</div>
