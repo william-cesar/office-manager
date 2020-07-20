@@ -1,3 +1,10 @@
 .Positions {
-	display: flex;
+	height: 100vh;
+	width: 100%;
+}
+
+.Positions .body {
+	position: fixed;
+	top: 60px;
+	left: 60px;
 }
