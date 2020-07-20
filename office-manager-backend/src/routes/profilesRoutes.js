@@ -5,12 +5,21 @@ const standardString = require('../helpers/standardString')
 
 const router = express.Router()
 
-router.get('/active/:page', async (req, res) => {
+router.get('/active/:name/:page', async (req, res) => {
+	let profile_name
+	const { name } = req.params
 	const { page } = req.params
 	const limit = 5
 
+	name == '*' ? (profile_name = ' ') : (profile_name = name)
+
 	const profile = await Profile.findAndCountAll({
-		where: { isActive: true },
+		where: {
+			profile_name: {
+				[Sequelize.Op.iLike]: `%${standardString(profile_name)}%`,
+			},
+			isActive: true,
+		},
 		order: [['profile_name', 'ASC']],
 		limit,
 		offset: paginate(page, limit),
@@ -23,12 +32,21 @@ router.get('/active/:page', async (req, res) => {
 	}
 })
 
-router.get('/inactive/:page', async (req, res) => {
+router.get('/inactive/:name/:page', async (req, res) => {
+	let profile_name
+	const { name } = req.params
 	const { page } = req.params
 	const limit = 5
 
+	name == '*' ? (profile_name = ' ') : (profile_name = name)
+
 	const profile = await Profile.findAndCountAll({
-		where: { isActive: false },
+		where: {
+			profile_name: {
+				[Sequelize.Op.iLike]: `%${standardString(profile_name)}%`,
+			},
+			isActive: false,
+		},
 		order: [['profile_name', 'ASC']],
 		limit,
 		offset: paginate(page, limit),
