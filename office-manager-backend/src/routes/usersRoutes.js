@@ -8,9 +8,10 @@ const validateDate = require('../helpers/validateDate')
 
 const router = express.Router()
 
-router.get('/active/:name/:page', async (req, res) => {
+router.get('/active/:name/:order/:page', async (req, res) => {
 	let first_name
 	const { name } = req.params
+	const { order } = req.params
 	const { page } = req.params
 	const limit = 5
 
@@ -23,7 +24,7 @@ router.get('/active/:name/:page', async (req, res) => {
 			},
 			isActive: true,
 		},
-		order: [['first_name', 'ASC']],
+		order: [['first_name', order]],
 		limit,
 		offset: paginate(page, limit),
 	})
@@ -35,9 +36,10 @@ router.get('/active/:name/:page', async (req, res) => {
 	}
 })
 
-router.get('/inactive/:name/:page', async (req, res) => {
+router.get('/inactive/:name/:order/:page', async (req, res) => {
 	let first_name
 	const { name } = req.params
+	const { order } = req.params
 	const { page } = req.params
 	const limit = 5
 
@@ -50,7 +52,7 @@ router.get('/inactive/:name/:page', async (req, res) => {
 			},
 			isActive: false,
 		},
-		order: [['first_name', 'ASC']],
+		order: [['first_name', order]],
 		limit,
 		offset: paginate(page, limit),
 	})

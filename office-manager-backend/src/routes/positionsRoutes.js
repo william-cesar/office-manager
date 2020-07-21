@@ -5,9 +5,10 @@ const standardString = require('../helpers/standardString')
 
 const router = express.Router()
 
-router.get('/active/:name/:page', async (req, res) => {
+router.get('/active/:name/:order/:page', async (req, res) => {
 	let position_name
 	const { name } = req.params
+	const { order } = req.params
 	const { page } = req.params
 	const limit = 5
 
@@ -20,7 +21,7 @@ router.get('/active/:name/:page', async (req, res) => {
 			},
 			isActive: true,
 		},
-		order: [['position_name', 'ASC']],
+		order: [['position_name', order]],
 		limit,
 		offset: paginate(page, limit),
 	})
@@ -32,9 +33,10 @@ router.get('/active/:name/:page', async (req, res) => {
 	}
 })
 
-router.get('/inactive/:name/:page', async (req, res) => {
+router.get('/inactive/:name/:order/:page', async (req, res) => {
 	let position_name
 	const { name } = req.params
+	const { order } = req.params
 	const { page } = req.params
 	const limit = 5
 
@@ -47,7 +49,7 @@ router.get('/inactive/:name/:page', async (req, res) => {
 			},
 			isActive: false,
 		},
-		order: [['position_name', 'ASC']],
+		order: [['position_name', order]],
 		limit,
 		offset: paginate(page, limit),
 	})

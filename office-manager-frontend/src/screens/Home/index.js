@@ -11,7 +11,7 @@ export default function Home() {
 
 	useEffect(() => {
 		const getActiveProfiles = () => {
-			const url = `http://localhost:3001/profiles/active/*/1`
+			const url = `http://localhost:3001/profiles/active/*/ASC/1`
 			axios.get(url).then((res) => {
 				setNumberOfActiveProfiles(res.data.data.count)
 			})
@@ -19,7 +19,7 @@ export default function Home() {
 		getActiveProfiles()
 
 		const getActivePositions = () => {
-			const url = `http://localhost:3001/positions/active/*/1`
+			const url = `http://localhost:3001/positions/active/*/ASC/1`
 			axios.get(url).then((res) => {
 				setNumberOfActivePositions(res.data.data.count)
 			})
@@ -27,7 +27,7 @@ export default function Home() {
 		getActivePositions()
 
 		const getActiveUsers = () => {
-			const url = `http://localhost:3001/users/active/*/1`
+			const url = `http://localhost:3001/users/active/*/ASC/1`
 			axios.get(url).then((res) => {
 				setNumberOfActiveUsers(res.data.data.count)
 			})
