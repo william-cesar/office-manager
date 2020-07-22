@@ -1,19 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './styles.css'
 
 import Header from '../../components/Header/Header'
 import Sidebar from '../../components/Sidebar/Sidebar'
 import Label from '../../components/Label/Label'
-import AddButton from '../../components/AddButton/AddButton'
+import Cards from '../../components/Cards/Cards'
 
 export default function Profiles() {
+	const [queryData, setQueryData] = useState('')
+
+	const getQueryData = (data) => {
+		setQueryData(data)
+	}
+
 	return (
 		<div className='Profiles'>
-			<Header name='perfil' table='profiles' />
+			<Header name='perfil' table='profiles' cardData={getQueryData} />
 			<Sidebar />
 			<div className='body'>
 				<Label name='Perfis' />
-				<AddButton name='perfil' />
+				<Cards cardInfo={queryData} table='profiles' />
 			</div>
 		</div>
 	)

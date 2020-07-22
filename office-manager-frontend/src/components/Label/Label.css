@@ -1,10 +1,31 @@
 .Label {
 	display: flex;
-	margin: 50px auto 40px;
+	align-items: center;
+	margin-top: 50px;
+}
+
+.Label .title {
+	width: 80%;
 	padding-left: 50px;
 }
 
 .Label h1 {
-	font-size: 42px;
 	font-weight: 700;
+	font-size: 42px;
+}
+
+.Label .AddButton {
+	display: flex;
+	width: 15%;
+	justify-content: center;
+}
+
+@media (max-width: 980px) {
+	.Label .title {
+		width: 70%;
+	}
+
+	.Label .AddButton {
+		width: 20%;
+	}
 }
