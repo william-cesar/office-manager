@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import './Header.css'
 
-export default function Header({ name, table }) {
+export default function Header({ name, table, cardData }) {
 	const [inputValue, setInputValue] = useState('*')
 	const [radioStatus, setRadioStatus] = useState('active')
 	const [radioOrder, setRadioOrder] = useState('ASC')
@@ -11,10 +11,18 @@ export default function Header({ name, table }) {
 
 	const search = () => {
 		const url = `http://localhost:3001/${table}/${radioStatus}/${inputValue}/${radioOrder}/1`
-		axios.get(url).then((res) => {
-			console.log(res)
-		})
+		axios
+			.get(url)
+			.then((res) => {
+				cardData(res.data.data)
+			})
+			.catch((err) => {
+				const errorType = err.toString()
+				cardData(errorType)
+			})
 		setShowOptionsMenu(false)
+		setRadioStatus('active')
+		setRadioOrder('ASC')
 	}
 
 	const handleKeyDown = (event) => {
