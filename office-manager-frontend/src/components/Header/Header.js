@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import './Header.css'
 
-export default function Header({ name, table, cardData }) {
+export default function Header({ name, table, searchData }) {
 	const [inputValue, setInputValue] = useState('*')
 	const [radioStatus, setRadioStatus] = useState('active')
 	const [radioOrder, setRadioOrder] = useState('ASC')
@@ -14,11 +14,11 @@ export default function Header({ name, table, cardData }) {
 		axios
 			.get(url)
 			.then((res) => {
-				cardData(res.data.data)
+				searchData(res.data.data)
 			})
 			.catch((err) => {
 				const errorType = err.toString()
-				cardData(errorType)
+				searchData(errorType)
 			})
 		setShowOptionsMenu(false)
 		setRadioStatus('active')
