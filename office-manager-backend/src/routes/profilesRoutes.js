@@ -5,6 +5,20 @@ const standardString = require('../helpers/standardString')
 
 const router = express.Router()
 
+router.get('/active', async (req, res) => {
+	const profile = await Profile.findAndCountAll({
+		where: {
+			isActive: true,
+		},
+	})
+
+	if (profile != '') {
+		return res.jsonOK(profile)
+	} else {
+		return res.jsonNotFound(null)
+	}
+})
+
 router.get('/active/:name/:order/:page', async (req, res) => {
 	let profile_name
 	const { name } = req.params
@@ -14,13 +28,14 @@ router.get('/active/:name/:order/:page', async (req, res) => {
 
 	name == '*' ? (profile_name = ' ') : (profile_name = name)
 
-	const profile = await Profile.findAndCountAll({
+	const profile = await Profile.findAll({
 		where: {
 			profile_name: {
 				[Sequelize.Op.iLike]: `%${standardString(profile_name)}%`,
 			},
 			isActive: true,
 		},
+		include: { model: Position },
 		order: [['profile_name', order]],
 		limit,
 		offset: paginate(page, limit),
@@ -42,13 +57,14 @@ router.get('/inactive/:name/:order/:page', async (req, res) => {
 
 	name == '*' ? (profile_name = ' ') : (profile_name = name)
 
-	const profile = await Profile.findAndCountAll({
+	const profile = await Profile.findAll({
 		where: {
 			profile_name: {
 				[Sequelize.Op.iLike]: `%${standardString(profile_name)}%`,
 			},
 			isActive: false,
 		},
+		include: { model: Position },
 		order: [['profile_name', order]],
 		limit,
 		offset: paginate(page, limit),

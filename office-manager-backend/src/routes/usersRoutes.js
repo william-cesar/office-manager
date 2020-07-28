@@ -8,6 +8,20 @@ const validateDate = require('../helpers/validateDate')
 
 const router = express.Router()
 
+router.get('/active', async (req, res) => {
+	const user = await User.findAndCountAll({
+		where: {
+			isActive: true,
+		},
+	})
+
+	if (user != '') {
+		return res.jsonOK(user)
+	} else {
+		return res.jsonNotFound(null)
+	}
+})
+
 router.get('/active/:name/:order/:page', async (req, res) => {
 	let first_name
 	const { name } = req.params
@@ -24,6 +38,7 @@ router.get('/active/:name/:order/:page', async (req, res) => {
 			},
 			isActive: true,
 		},
+		include: { model: Position },
 		order: [['first_name', order]],
 		limit,
 		offset: paginate(page, limit),

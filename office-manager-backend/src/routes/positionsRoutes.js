@@ -5,6 +5,20 @@ const standardString = require('../helpers/standardString')
 
 const router = express.Router()
 
+router.get('/active', async (req, res) => {
+	const position = await Position.findAndCountAll({
+		where: {
+			isActive: true,
+		},
+	})
+
+	if (position != '') {
+		return res.jsonOK(position)
+	} else {
+		return res.jsonNotFound(null)
+	}
+})
+
 router.get('/active/:name/:order/:page', async (req, res) => {
 	let position_name
 	const { name } = req.params
@@ -21,6 +35,7 @@ router.get('/active/:name/:order/:page', async (req, res) => {
 			},
 			isActive: true,
 		},
+		include: { model: User },
 		order: [['position_name', order]],
 		limit,
 		offset: paginate(page, limit),
@@ -49,6 +64,7 @@ router.get('/inactive/:name/:order/:page', async (req, res) => {
 			},
 			isActive: false,
 		},
+		include: { model: User },
 		order: [['position_name', order]],
 		limit,
 		offset: paginate(page, limit),
