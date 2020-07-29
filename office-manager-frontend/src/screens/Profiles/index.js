@@ -6,6 +6,7 @@ import Header from '../../components/Header/Header'
 import Sidebar from '../../components/Sidebar/Sidebar'
 import Label from '../../components/Label/Label'
 import Cards from '../../components/Cards/Cards'
+import EditDelete from '../../components/EditDelete/EditDelete'
 
 export default function Profiles() {
 	const [queryData, setQueryData] = useState('')
@@ -22,8 +23,18 @@ export default function Profiles() {
 			.then((res) => {
 				const result = res.data.data
 				const cardsArr = []
-				for (const { id, profile_name } of result.rows) {
-					cardsArr.push(<li key={id}>{profile_name}</li>)
+				for (const { id, profile_name, Positions } of result) {
+					cardsArr.push(
+						<div className='card-unit' key={id}>
+							<div className='card-label'>
+								<h2>{profile_name}</h2>
+							</div>
+							<div className='card-info'>
+								<h4>{Positions.length} cargos ativos</h4>
+							</div>
+							<EditDelete />
+						</div>
+					)
 				}
 				setCardInfo(cardsArr)
 			})
@@ -44,8 +55,18 @@ export default function Profiles() {
 	useEffect(() => {
 		if (typeof queryData === 'object') {
 			const cardsArr = []
-			for (const { id, profile_name } of queryData.rows) {
-				cardsArr.push(<li key={id}>{profile_name}</li>)
+			for (const { id, profile_name, Positions = [], isActive } of queryData) {
+				cardsArr.push(
+					<div className='card-unit' key={id}>
+						<div className='card-label'>
+							<h2>{profile_name}</h2>
+						</div>
+						<div className='card-info'>
+							<h4>{Positions.length} cargos ativos</h4>
+						</div>
+						<EditDelete status={isActive} />
+					</div>
+				)
 			}
 			setCardInfo(cardsArr)
 		}

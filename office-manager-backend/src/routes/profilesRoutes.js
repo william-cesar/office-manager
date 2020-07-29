@@ -35,7 +35,14 @@ router.get('/active/:name/:order/:page', async (req, res) => {
 			},
 			isActive: true,
 		},
-		include: { model: Position },
+		include: {
+			model: Position,
+			attributes: ['position_name'],
+			where: {
+				isActive: true,
+			},
+			required: false,
+		},
 		order: [['profile_name', order]],
 		limit,
 		offset: paginate(page, limit),
@@ -64,7 +71,6 @@ router.get('/inactive/:name/:order/:page', async (req, res) => {
 			},
 			isActive: false,
 		},
-		include: { model: Position },
 		order: [['profile_name', order]],
 		limit,
 		offset: paginate(page, limit),

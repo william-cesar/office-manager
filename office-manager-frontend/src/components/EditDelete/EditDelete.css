@@ -1,0 +1,29 @@
+.EditDelete .edit,
+.EditDelete .delete {
+	border-radius: 5px;
+	width: 75px;
+	height: 25px;
+	margin: 10px;
+}
+
+.EditDelete .edit {
+	border: #44aad6 1px solid;
+	background-color: #ffffff;
+	color: #44aad6;
+}
+
+.EditDelete .delete {
+	border: #fd937b 1px solid;
+	background-color: #fd937b;
+	color: #0e2833;
+}
+
+.EditDelete .edit:hover,
+.EditDelete .delete:hover {
+	cursor: pointer;
+}
+
+.EditDelete .delete:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}

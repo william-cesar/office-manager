@@ -28,14 +28,21 @@ router.get('/active/:name/:order/:page', async (req, res) => {
 
 	name == '*' ? (position_name = ' ') : (position_name = name)
 
-	const position = await Position.findAndCountAll({
+	const position = await Position.findAll({
 		where: {
 			position_name: {
 				[Sequelize.Op.iLike]: `%${standardString(position_name)}%`,
 			},
 			isActive: true,
 		},
-		include: { model: User },
+		include: {
+			model: User,
+			attributes: ['first_name', 'last_name'],
+			where: {
+				isActive: true,
+			},
+			required: false,
+		},
 		order: [['position_name', order]],
 		limit,
 		offset: paginate(page, limit),
@@ -57,14 +64,13 @@ router.get('/inactive/:name/:order/:page', async (req, res) => {
 
 	name == '*' ? (position_name = ' ') : (position_name = name)
 
-	const position = await Position.findAndCountAll({
+	const position = await Position.findAll({
 		where: {
 			position_name: {
 				[Sequelize.Op.iLike]: `%${standardString(position_name)}%`,
 			},
 			isActive: false,
 		},
-		include: { model: User },
 		order: [['position_name', order]],
 		limit,
 		offset: paginate(page, limit),
