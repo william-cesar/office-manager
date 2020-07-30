@@ -8,20 +8,6 @@ const validateDate = require('../helpers/validateDate')
 
 const router = express.Router()
 
-router.get('/active', async (req, res) => {
-	const user = await User.findAndCountAll({
-		where: {
-			isActive: true,
-		},
-	})
-
-	if (user != '') {
-		return res.jsonOK(user)
-	} else {
-		return res.jsonNotFound(null)
-	}
-})
-
 router.get('/active/:name/:order/:page', async (req, res) => {
 	let first_name
 	const { name } = req.params
@@ -31,7 +17,8 @@ router.get('/active/:name/:order/:page', async (req, res) => {
 
 	name == '*' ? (first_name = ' ') : (first_name = name)
 
-	const user = await User.findAll({
+	const user = await User.findAndCountAll({
+		distinct: 'id',
 		where: {
 			first_name: {
 				[Sequelize.Op.iLike]: `%${standardString(first_name)}%`,
@@ -63,7 +50,8 @@ router.get('/inactive/:name/:order/:page', async (req, res) => {
 
 	name == '*' ? (first_name = ' ') : (first_name = name)
 
-	const user = await User.findAll({
+	const user = await User.findAndCountAll({
+		distinct: 'id',
 		where: {
 			first_name: {
 				[Sequelize.Op.iLike]: `%${standardString(first_name)}%`,

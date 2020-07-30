@@ -14,7 +14,7 @@ export default function Header({ name, table, searchData }) {
 		axios
 			.get(url)
 			.then((res) => {
-				searchData(res.data.data)
+				searchData(res.data.data.rows)
 			})
 			.catch((err) => {
 				const errorType = err.toString()

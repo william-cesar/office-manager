@@ -21,7 +21,7 @@ export default function Positions() {
 		axios
 			.get(defaultUrl)
 			.then((res) => {
-				const result = res.data.data
+				const result = res.data.data.rows
 				const cardsArr = []
 				for (const { id, position_name, Users } of result) {
 					cardsArr.push(

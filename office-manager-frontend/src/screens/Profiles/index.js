@@ -21,7 +21,7 @@ export default function Profiles() {
 		axios
 			.get(defaultUrl)
 			.then((res) => {
-				const result = res.data.data
+				const result = res.data.data.rows
 				const cardsArr = []
 				for (const { id, profile_name, Positions } of result) {
 					cardsArr.push(

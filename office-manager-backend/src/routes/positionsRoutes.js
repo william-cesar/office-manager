@@ -5,20 +5,6 @@ const standardString = require('../helpers/standardString')
 
 const router = express.Router()
 
-router.get('/active', async (req, res) => {
-	const position = await Position.findAndCountAll({
-		where: {
-			isActive: true,
-		},
-	})
-
-	if (position != '') {
-		return res.jsonOK(position)
-	} else {
-		return res.jsonNotFound(null)
-	}
-})
-
 router.get('/active/:name/:order/:page', async (req, res) => {
 	let position_name
 	const { name } = req.params
@@ -28,7 +14,8 @@ router.get('/active/:name/:order/:page', async (req, res) => {
 
 	name == '*' ? (position_name = ' ') : (position_name = name)
 
-	const position = await Position.findAll({
+	const position = await Position.findAndCountAll({
+		distinct: 'id',
 		where: {
 			position_name: {
 				[Sequelize.Op.iLike]: `%${standardString(position_name)}%`,
@@ -64,7 +51,8 @@ router.get('/inactive/:name/:order/:page', async (req, res) => {
 
 	name == '*' ? (position_name = ' ') : (position_name = name)
 
-	const position = await Position.findAll({
+	const position = await Position.findAndCountAll({
+		distinct: 'id',
 		where: {
 			position_name: {
 				[Sequelize.Op.iLike]: `%${standardString(position_name)}%`,
