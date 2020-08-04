@@ -21,9 +21,9 @@ export default function Positions() {
 		axios
 			.get(defaultUrl)
 			.then((res) => {
-				const result = res.data.data.rows
+				const result = res.data.data
 				const cardsArr = []
-				for (const { id, position_name, Users } of result) {
+				for (const { id, position_name, Users } of result.rows) {
 					cardsArr.push(
 						<div className='card-unit' key={id}>
 							<div className='card-label'>
@@ -55,7 +55,12 @@ export default function Positions() {
 	useEffect(() => {
 		if (typeof queryData === 'object') {
 			const cardsArr = []
-			for (const { id, position_name, Users = [], isActive } of queryData) {
+			for (const {
+				id,
+				position_name,
+				Users = [],
+				isActive,
+			} of queryData.rows) {
 				cardsArr.push(
 					<div className='card-unit' key={id}>
 						<div className='card-label'>
@@ -77,7 +82,7 @@ export default function Positions() {
 			if (errorType === 'Request') {
 				const errorMsg = []
 				errorMsg.push(
-					<div className='error'>
+					<div className='error' key={errorType}>
 						<h1>404 - Not Found</h1>
 					</div>
 				)
@@ -87,7 +92,7 @@ export default function Positions() {
 			if (errorType === 'Network') {
 				const errorMsg = []
 				errorMsg.push(
-					<div className='error'>
+					<div className='error' key={errorType}>
 						<h1>505 - Network Error</h1>
 					</div>
 				)

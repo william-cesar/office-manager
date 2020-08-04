@@ -21,9 +21,9 @@ export default function Users() {
 		axios
 			.get(defaultUrl)
 			.then((res) => {
-				const result = res.data.data.rows
+				const result = res.data.data
 				const cardsArr = []
-				for (const { id, first_name, last_name, Position } of result) {
+				for (const { id, first_name, last_name, Position } of result.rows) {
 					cardsArr.push(
 						<div className='card-unit' key={id}>
 							<div className='card-label'>
@@ -63,7 +63,7 @@ export default function Users() {
 				last_name,
 				Position,
 				isActive,
-			} of queryData) {
+			} of queryData.rows) {
 				cardsArr.push(
 					<div className='card-unit' key={id}>
 						<div className='card-label'>
@@ -87,7 +87,7 @@ export default function Users() {
 			if (errorType === 'Request') {
 				const errorMsg = []
 				errorMsg.push(
-					<div className='error'>
+					<div className='error' key={errorType}>
 						<h1>404 - Not Found</h1>
 					</div>
 				)
@@ -97,7 +97,7 @@ export default function Users() {
 			if (errorType === 'Network') {
 				const errorMsg = []
 				errorMsg.push(
-					<div className='error'>
+					<div className='error' key={errorType}>
 						<h1>505 - Network Error</h1>
 					</div>
 				)
